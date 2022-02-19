@@ -15,16 +15,17 @@
             이렇게 하면 어디서든 input의 value를 수정해줄 수 있다
             onChange 속성을 주어서 값이 변경될 때마다 함수를 실행시키는 것도 가능하다
         */
-        function App() {
+
+        function MinutesToHours() {
             const [amount, setAmount] = React.useState(0); //data, data를 수정하기 위한 function
-            const [flipped, setFlipped] = React.useState(false); //flipped가 false면 minutes변경 가능, hours 변경 불가
+            const [inverted, setInverted] = React.useState(false); //flipped가 false면 minutes변경 가능, hours 변경 불가
             const onChange = (event) => {
                 setAmount(event.target.value);
             };
             const reset = () => setAmount(0);
-            const onFlip = () => {
+            const onInvert = () => {
                 reset();
-                setFlipped((current) => !current);
+                setInverted((current) => !current);
             };
 
             return (
@@ -37,17 +38,15 @@
                         문법에 어긋나는 이유는, for가 JS의 용어이기 때문이다. (class또한 마찬가지)
                         그래서 htmlFor로 써야한다. (class는 className)
                     */}
-                    <h1>Super Converter</h1>
-
                     <div>
                         <label htmlFor="minutes">Minutes</label>
                         <input
-                            value={flipped ? amount * 60 : amount}
+                            value={inverted ? amount * 60 : amount}
                             id="minutes"
                             placeholder="Minutes"
                             type="number"
                             onChange={onChange}
-                            disabled={flipped}
+                            disabled={inverted}
                         />
                         {/*
                         위 input에서 value={minutes}는 살려두고 onChange={onChange}는 삭제하면
@@ -59,20 +58,54 @@
                     <div>
                         <label htmlFor="hours">Hours</label>
                         <input
-                            value={flipped ? amount : Math.round(amount / 60)}
+                            value={inverted ? amount : Math.round(amount / 60)}
                             id="hours"
                             placeholder="Hours"
                             type="number"
                             onChange={onChange}
-                            disabled={!flipped}
+                            disabled={!inverted}
                         />
                     </div>
 
                     <button onClick={reset}>Reset</button>
-                    <button onClick={onFlip}>Flip</button>
+                    <button onClick={onInvert}>
+                        {inverted ? "Turn back" : "Inverted"}
+                    </button>
                 </div>
             );
         }
+
+        function KmToMiles() {
+            return <h3>KM 2 M</h3>;
+        }
+
+        //JSX에서 {}안에 무언가를 쓰면 JS로 읽힌다
+        function App() {
+            const [index, setIndex] = React.useState("select");
+            const onSelect = (event) => {
+                setIndex(event.target.value);
+            };
+            return (
+                <div>
+                    <h1>Super Converter</h1>
+                    <select
+                        value={index}
+                        onChange={onSelect}
+                        style={{width: "200px"}}
+                    >
+                        <option value="select">Select your units</option>
+                        <option value="0">Minutes & Hours</option>
+                        <option value="1">Km & Miles</option>
+                    </select>
+
+                    <hr />
+                    {index === "select" ? "Please select your units" : null}
+                    {index === "0" ? <MinutesToHours /> : null}
+                    {index === "1" ? <KmToMiles /> : null}
+                </div>
+            );
+        }
+
         ReactDOM.render(<App />, root);
     </script>
 </html>
